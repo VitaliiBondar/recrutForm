@@ -1,0 +1,25 @@
+# Node.js
+node_modules/
+dist/
+.env
+
+# VS Code
+.vscode/
+
+# system
+.DS_Store
+*.log
+npm-debug.log*
+
+# Firebase (локальні файли)
+.firebase/
+firestore-debug.log
+
+# Yarn
+yarn.lock
+.pnpm-debug.log
+.pnp.*
+
+# build
+*.tsbuildinfo
+coverage/
