@@ -32,14 +32,37 @@ export default function CandidateForm() {
 
   const onSubmit = async (data: FormData) => {
     try {
+      // 1. Зберігаємо в Firestore
       await addDoc(collection(db, 'candidates'), {
         ...data,
         createdAt: Timestamp.now(),
       });
+
+      // 2. Надсилаємо повідомлення в Telegram
+      const message = `
+🆕 Нова анкета:
+👤 Імʼя: ${data.name}
+📞 Телефон: ${data.phone}
+🔧 Спеціальність: ${data.specialty}
+🪖 Досвід: ${data.experience}
+`;
+
+      await fetch(
+        `https://api.telegram.org/bot${import.meta.env.VITE_TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: import.meta.env.VITE_TELEGRAM_CHAT_ID,
+            text: message,
+          }),
+        }
+      );
+
       setSubmitted(true);
       reset();
     } catch (error) {
-      console.error('Помилка при збереженні:', error);
+      console.error('Помилка при збереженні або відправці:', error);
     }
   };
 
